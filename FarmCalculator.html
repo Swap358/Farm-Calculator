@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="mr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>काठी ⇄ गुंठा काळकूट — शेत मोजणी साधन</title>
+
+    <!-- Light Blue Theme + Clean Responsive UI -->
+    <style>
+      :root {
+        --bg: #eaf4ff; /* very light blue */
+        --card: #ffffff;
+        --accent: #0b67ff; /* primary blue */
+        --muted: #475569;
+        --btn-radius: 12px;
+        --gap: 12px;
+        --max-width: 880px;
+      }
+
+      /* Basic reset */
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: "Noto Sans", system-ui, -apple-system, "Segoe UI", Roboto,
+          Arial;
+        background: linear-gradient(180deg, var(--bg), #f6fbff 60%);
+        color: #08263c;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        padding: 16px;
+        display: flex;
+        justify-content: center;
+      }
+
+      /* Page container */
+      .wrap {
+        width: 100%;
+        max-width: var(--max-width);
+      }
+
+      /* Top header with logo + nav */
+      header.app-header {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+
+      .logo {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .logo svg {
+        width: 52px;
+        height: 52px;
+        flex-shrink: 0;
+      }
+
+      .app-title {
+        line-height: 1;
+      }
+      .app-title h1 {
+        margin: 0;
+        font-size: 18px;
+        letter-spacing: 0.2px;
+      }
+      .app-title p {
+        margin: 2px 0 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      nav.top-nav {
+        margin-left: auto;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      nav.top-nav a {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 8px 12px;
+        background: rgba(11, 103, 255, 0.1);
+        color: var(--accent);
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 13px;
+        text-decoration: none;
+      }
+
+      /* Card style */
+      .card {
+        background: var(--card);
+        border-radius: 14px;
+        padding: 14px;
+        box-shadow: 0 8px 30px rgba(7, 34, 64, 0.06);
+        margin-bottom: var(--gap);
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      input[type="number"],
+      select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #666a70;
+        font-size: 15px;
+        outline: none;
+      }
+      input[type="number"]:focus,
+      select:focus {
+        box-shadow: 0 0 0 4px rgba(11, 103, 255, 0.06);
+      }
+
+      .row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .row > * {
+        flex: 1 1 48%;
+      }
+      .fixed-width {
+        flex: 0 0 48%;
+      }
+
+      .mutebtn,
+      button {
+        background: var(--accent);
+        color: white;
+        padding: 10px 12px;
+        border-radius: var(--btn-radius);
+        border: 0;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .mutebtn.secondary {
+        background: #6081ee;
+      }
+      .mutebtn.danger {
+        background: #b91c1c;
+      }
+      .mutebtn.small {
+        padding: 8px 10px;
+        font-size: 13px;
+      }
+
+      .entries {
+        display: grid;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .entry {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .entry input {
+        flex: 1 1 42%;
+        padding: 10px;
+      }
+      .entry .del {
+        background: #fff0f0;
+        color: #b91c1c;
+        border: 1px solid #ffdede;
+        padding: 8px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 18px;
+      }
+
+      .output {
+        display: grid;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .outrow {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-radius: 10px;
+        background: lightgray;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .outrow div:first-child {
+        font-weight: 700;
+        color: #0b2a3a;
+      }
+
+      .foot {
+        font-size: 13px;
+        color: var(--muted);
+        text-align: center;
+        margin-top: 8px;
+      }
+
+      /* small helper */
+      .small {
+        font-size: 13px;
+        color: #fff;
+      }
+
+      /* kamimap */
+      .kami-card {
+        background: #fff8e6;
+        padding: 12px;
+        border-radius: 10px;
+      }
+      .kami-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .delete-kami {
+        background: #ff6b6b;
+        border: 0;
+        color: #fff;
+        padding: 8px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      /* paise table */
+      #paiseTable th,
+      #paiseTable td {
+        padding: 8px;
+      }
+      #paiseTable thead th {
+        font-weight: 700;
+        color: #0b2a3a;
+        border-bottom: 2px solid #e6eefc;
+      }
+
+      /* responsive tweaks */
+      @media (max-width: 640px) {
+        nav.top-nav {
+          display: flex;
+          gap: 6px;
+        }
+        .logo svg {
+          width: 44px;
+          height: 44px;
+        }
+        .app-title h1 {
+          font-size: 16px;
+        }
+        .row > * {
+          flex-basis: 100%;
+        }
+        input.fixed-width {
+          flex-basis: 100%;
+        }
+        .mutebtn,
+        button {
+          width: 100%;
+        }
+        .entry input {
+          flex-basis: 100%;
+        }
+      }
+
+      /* smooth scroll for nav */
+      html {
+        scroll-behavior: smooth;
+      }
+
+
+
+        footer {
+    background: #111;
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 14px;
+    margin-top: 40px;
+  }
+
+  footer p {
+    margin: 0;
+    letter-spacing: 0.5px;
+  }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <!-- HEADER: logo + title + nav -->
+      <header class="app-header">
+        <div class="logo" aria-hidden="true">
+          <!-- Wheat icon (stylish, village-friendly) -->
+          <svg
+            viewBox="0 0 64 64"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            role="img"
+            aria-label="Wheat logo"
+          >
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="#ffd98a" />
+                <stop offset="1" stop-color="#ffb84d" />
+              </linearGradient>
+            </defs>
+            <rect width="64" height="64" rx="12" fill="#eaf6ff" />
+            <path
+              d="M32 12c0 0 6 6 10.5 10.5S56 36 56 36s-4 1-8.5-0.5S36 31 32 28"
+              stroke="url(#g1)"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M32 12c0 0-6 6-10.5 10.5S8 36 8 36s4 1 8.5-0.5S28 31 32 28"
+              stroke="url(#g1)"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M28 36c0 6 4 12 4 12s4-6 4-12"
+              stroke="#ff9f2e"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <circle cx="32" cy="10" r="2" fill="#ffb84d" />
+          </svg>
+          <div class="app-title">
+            <h1>काठी ⇄ गुंठा — शेत मोजणी साधन</h1>
+            <p>मोबाइल-सुसंगत · सोपे · गावासाठी</p>
+          </div>
+        </div>
+
+        <nav class="top-nav" aria-label="Main navigation">
+          <a href="#calc-section">🔢 गणना</a>
+          <a href="#entries-section">🧾 नोंदी</a>
+          <a href="#kamimap-section">📏 कमी माप</a>
+          <a href="#paise-section">💰 पैसे वाटप</a>
+          <a href="#mojne-section">👷 मजूर मोजणी</a>
+        </nav>
+      </header>
+
+      <!-- Intro card -->
+      <section id="intro-section" class="card">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+          "
+        >
+          <div>
+            <div class="small">
+              मोबाइल आणि डेस्कटॉपवर वापरायला सोपे. नवीन नोंदी जोडा, दर सेट करा
+              आणि लगेच निकाल पहा.
+            </div>
+          </div>
+          <div style="min-width: 160px">
+            <button id="calc" title="गणना करा">🔎 गणना करा</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main settings -->
+      <section id="calc-section" class="card" aria-labelledby="calc-heading">
+        <h2 id="calc-heading" style="margin: 0 0 8px 0">मूळ सेटिंग्स</h2>
+
+        <label>काठीची लांबी (फूट) — (सर्वसाधारण 7 फूट)</label>
+        <input id="kathiFeet" type="number" value="7" step="0.01" />
+
+        <div style="height: 10px"></div>
+        <label>रूपांतरण — 1 गुंठा = किती काठी (तुझी पद्धत)</label>
+        <input id="kathiPerGunthe" type="number" value="20" step="0.01" />
+
+        <div style="height: 10px"></div>
+        <label>दर निवडा / भरा</label>
+        <div class="row">
+          <select id="ratePreset" aria-label="दर प्रीसेट">
+            <option value="300">₹300 प्रति गुंठा</option>
+            <option value="275">₹275 प्रति गुंठा</option>
+            <option value="350">₹350 प्रति गुंठा</option>
+            <option value="custom">कस्टम</option>
+          </select>
+          <input id="rateGunthe" type="number" value="300" step="1" />
+        </div>
+
+        <div style="height: 10px"></div>
+        <label>एकर दर (ऐच्छिक) — उदाहरण: ₹12000/एकर</label>
+        <input id="rateEkar" type="number" value="12000" step="1" />
+      </section>
+
+      <!-- Entries (उभ्या x आडवा) -->
+      <section
+        id="entries-section"
+        class="card"
+        aria-labelledby="entries-heading"
+      >
+        <div
+          style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"
+        >
+          <strong id="entries-heading"
+            >शेत नोंदी (उभ्या × आडवा — काठी मध्ये)</strong
+          >
+          <div
+            style="margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap"
+          >
+            <button id="addEntry" class="mutebtn small">+ नोंद जोडा</button>
+            <button id="toggleKamimap" class="mutebtn small secondary">
+              कमी माप दाखवा
+            </button>
+          </div>
+        </div>
+
+        <div id="entries" class="entries"></div>
+
+        <div
+          id="kamimap-section"
+          style="display: none; margin-top: 10px"
+          class="kami-card"
+          aria-hidden="true"
+        >
+          <label style="margin-bottom: 8px"
+            >कमी माप क्षेत्र (उभ्या × आडवा — काठी मध्ये) — उदा. विहीर, तळे
+            इ.</label
+          >
+          <div id="kamiList"></div>
+          <div style="margin-top: 8px">
+            <button id="addKami" class="mutebtn small">+ कमी नोंद जोडा</button>
+          </div>
+        </div>
+
+        <div style="height: 12px"></div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap">
+          <!-- Note: calc button duplicated for convenience -->
+          <button id="calc-duplicate" class="mutebtn small">गणना करा</button>
+          <button id="reset" class="mutebtn small secondary">रीसेट</button>
+          <button id="download" class="mutebtn small">निविष्ट डाउनलोड</button>
+          <button id="paiseVatapBtn" class="mutebtn small">पैसे वाटप</button>
+        </div>
+      </section>
+
+      <!-- Paise Vatap -->
+      <section id="paise-section" class="card" aria-labelledby="paise-heading">
+        <h3 id="paise-heading" style="margin: 0 0 8px 0">पैसे वाटप</h3>
+
+        <div id="paiseVatapDiv" style="display: none">
+          <label>एकूण रक्कम (₹)</label>
+          <input type="number" id="manualAmount" placeholder="उदा. 1000" />
+
+          <div style="height: 8px"></div>
+          <label>एकूण मजुरीदारांची संख्या</label>
+          <input type="number" id="totalLabour" value="1" step="1" />
+
+          <h4 id="perDayHeading">दर दिवसाचे पैसे: ₹0</h4>
+
+          <table
+            id="paiseTable"
+            style="width: 100%; border-collapse: collapse; text-align: center"
+          >
+            <thead>
+              <tr>
+                <th>दिवस</th>
+                <th>पैसे</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <div style="margin-top: 8px">
+            <button id="addPaiseRow" class="mutebtn small">दिवस वाढवा</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mojne (मजूर मोजणी) -->
+      <section id="mojne-section" class="card" aria-labelledby="mojne-heading">
+        <div
+          style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"
+        >
+          <strong id="mojne-heading">मजूर मोजणे / Total मोजणे</strong>
+          <div style="margin-left: auto">
+            <button id="mojneBtn" class="mutebtn small">मजूर मोजणी उघडा</button>
+          </div>
+        </div>
+
+        <div id="mojneDiv" style="display: none; margin-top: 12px">
+          <label>दररोज किती मजूर हजर होते?</label>
+          <input type="number" id="bahyaInput" placeholder="उदा. 23" />
+
+          <div
+            style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap"
+          >
+            <button id="addBahya" class="mutebtn small">Add</button>
+            <button id="resetBahya" class="mutebtn small danger">Reset</button>
+          </div>
+
+          <div style="margin-top: 12px">
+            <h4 id="bahyaTotalHeading">एकूण बेरीज: 0</h4>
+            <h4 id="bahyaCountHeading">जोडलेली संख्या: 0</h4>
+            <p id="bahyaBreakdown" style="font-weight: bold"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Output -->
+      <section class="card" aria-labelledby="output-heading">
+        <h3 id="output-heading" style="margin: 0 0 8px 0">निकाल</h3>
+
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+          "
+        >
+          <label style="margin: 0">अधिकृत तुलना दाखवा</label>
+          <input type="checkbox" id="toggleOfficial" checked />
+        </div>
+
+        <div class="output" id="output">
+          <div class="outrow">
+            <div>एकूण काठी</div>
+            <div id="totalKathi">0</div>
+          </div>
+          <div class="outrow">
+            <div>एकूण गुंठे (तुझ्या पद्धतीने)</div>
+            <div id="totalGunthe">0</div>
+          </div>
+          <div class="outrow">
+            <div>पूर्ण गुंठे</div>
+            <div id="intGunthe">0</div>
+          </div>
+          <div class="outrow">
+            <div>किती काठी</div>
+            <div id="decToKathi">0</div>
+          </div>
+          <div class="outrow">
+            <div>1 काठी किंमत</div>
+            <div id="pricePerKathi">₹0</div>
+          </div>
+          <div class="outrow">
+            <div>कमी एकूण काठी (वजा)</div>
+            <div id="kamiTotal">0</div>
+          </div>
+          <div class="outrow">
+            <div>काठी एकूण रुपये</div>
+            <div id="decRupees">₹0</div>
+          </div>
+          <div class="outrow">
+            <div>एकूण रक्कम</div>
+            <div id="totalRupees">₹0</div>
+          </div>
+          <div class="outrow" id="officialRow">
+            <div>तुलनात्मक (अधिकृत) 1 गुंठा = 22.24 काठी</div>
+            <div id="officialCompare">0 गुंठे</div>
+          </div>
+        </div>
+
+        <div class="foot">
+          नोंदी जोडताना उभ्या × आडवा भरा (काठी मध्ये). उदाहरण: 23 × 25
+        </div>
+      </section>
+
+
+       <footer>
+  <p>© 2025 | All Rights Reserved | Designed by <strong>Swapnil</strong></p>
+</footer>
+    </div>
+
+    <!-- SCRIPT: preserved logic, reorganized for DOMContentLoaded -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        /* ---------- Elements (keep same IDs to preserve logic) ---------- */
+        const entriesEl = document.getElementById("entries");
+        const addEntryBtn = document.getElementById("addEntry");
+        const calcBtn = document.getElementById("calc");
+        const calcDuplicateBtn = document.getElementById("calc-duplicate");
+        const resetBtn = document.getElementById("reset");
+        const downloadBtn = document.getElementById("download");
+        const ratePreset = document.getElementById("ratePreset");
+        const rateGunthe = document.getElementById("rateGunthe");
+        const toggleOfficial = document.getElementById("toggleOfficial");
+        const officialRow = document.getElementById("officialRow");
+        const toggleKamimap = document.getElementById("toggleKamimap");
+        const kamimapDiv = document.getElementById("kamimap-section");
+        const kamiList = document.getElementById("kamiList");
+        const addKami = document.getElementById("addKami");
+
+        /* paise vatap */
+        const paiseVatapBtn = document.getElementById("paiseVatapBtn");
+        const paiseVatapDiv = document.getElementById("paiseVatapDiv");
+        const totalLabourInput = document.getElementById("totalLabour");
+        const perDayHeading = document.getElementById("perDayHeading");
+        const paiseTableBody = document
+          .getElementById("paiseTable")
+          .querySelector("tbody");
+        const addPaiseRowBtn = document.getElementById("addPaiseRow");
+        const manualAmountInput = document.getElementById("manualAmount");
+
+        /* mojne */
+        const mojneBtn = document.getElementById("mojneBtn");
+        const mojneDiv = document.getElementById("mojneDiv");
+        const addBahya = document.getElementById("addBahya");
+        const resetBahya = document.getElementById("resetBahya");
+        const bahyaInput = document.getElementById("bahyaInput");
+        const bahyaTotalHeading = document.getElementById("bahyaTotalHeading");
+        const bahyaCountHeading = document.getElementById("bahyaCountHeading");
+        const bahyaBreakdown = document.getElementById("bahyaBreakdown");
+
+        /* outputs */
+        const totalKathiEl = document.getElementById("totalKathi");
+        const totalGuntheEl = document.getElementById("totalGunthe");
+        const intGuntheEl = document.getElementById("intGunthe");
+        const decToKathiEl = document.getElementById("decToKathi");
+        const pricePerKathiEl = document.getElementById("pricePerKathi");
+        const kamiTotalEl = document.getElementById("kamiTotal");
+        const decRupeesEl = document.getElementById("decRupees");
+        const totalRupeesEl = document.getElementById("totalRupees");
+        const officialCompareEl = document.getElementById("officialCompare");
+
+        /* other inputs */
+        const kathiPerGuntheInput = document.getElementById("kathiPerGunthe");
+        const rateEkarInput = document.getElementById("rateEkar");
+
+        /* ---------- State ---------- */
+        let bahyaList = [];
+        let perPerson = 0;
+        let remainder = 0;
+        let currentDivas = 1;
+
+        /* ---------- UI Helpers ---------- */
+        toggleOfficial.addEventListener("change", () => {
+          officialRow.style.display = toggleOfficial.checked ? "flex" : "none";
+        });
+
+        toggleKamimap.addEventListener("click", () => {
+          kamimapDiv.style.display =
+            kamimapDiv.style.display === "none" ||
+            kamimapDiv.style.display === ""
+              ? "block"
+              : "none";
+        });
+
+        /* ---------- Entries creation ---------- */
+        function makeEntry(v1 = "", v2 = "") {
+          const wrap = document.createElement("div");
+          wrap.className = "entry card";
+          const a = document.createElement("input");
+          a.type = "number";
+          a.placeholder = "उभा (काठी)";
+          a.value = v1;
+          a.step = "0.01";
+          a.className = "fixed-width";
+          const b = document.createElement("input");
+          b.type = "number";
+          b.placeholder = "आडवा (काठी)";
+          b.value = v2;
+          b.step = "0.01";
+          b.className = "fixed-width";
+          const del = document.createElement("button");
+          del.className = "del";
+          del.innerHTML = "🗑️";
+          del.onclick = () => {
+            wrap.remove();
+            doCalc();
+          };
+          wrap.appendChild(a);
+          wrap.appendChild(b);
+          wrap.appendChild(del);
+          entriesEl.appendChild(wrap);
+          return wrap;
+        }
+
+        function makeKami(u = 0, a = 0) {
+          const kwrap = document.createElement("div");
+          kwrap.className = "kami-row";
+          const ub = document.createElement("input");
+          ub.type = "number";
+          ub.placeholder = "उभ्या काठी";
+          ub.value = u;
+          ub.step = "0.01";
+          ub.className = "kamiUb fixed-width";
+          const ad = document.createElement("input");
+          ad.type = "number";
+          ad.placeholder = "आडवी काठी";
+          ad.value = a;
+          ad.step = "0.01";
+          ad.className = "kamiAd fixed-width";
+          const delk = document.createElement("button");
+          delk.className = "delete-kami";
+          delk.innerHTML = "🗑️";
+          delk.title = "काढा";
+          delk.onclick = () => {
+            kwrap.remove();
+            doCalc();
+          };
+          kwrap.appendChild(ub);
+          kwrap.appendChild(ad);
+          kwrap.appendChild(delk);
+          kamiList.appendChild(kwrap);
+          return kwrap;
+        }
+
+        if (entriesEl.children.length === 0) {
+          makeEntry(0, 0);
+        }
+
+        addEntryBtn.addEventListener("click", () => makeEntry());
+        addKami.addEventListener("click", () => makeKami());
+        calcBtn.addEventListener("click", doCalc);
+        calcDuplicateBtn.addEventListener("click", doCalc);
+
+        ratePreset.addEventListener("change", () => {
+          if (ratePreset.value === "custom") rateGunthe.focus();
+          else rateGunthe.value = ratePreset.value;
+        });
+
+        resetBtn.addEventListener("click", () => {
+          entriesEl.innerHTML = "";
+          kamiList.innerHTML = "";
+          makeEntry();
+          document.getElementById("kathiFeet").value = "7";
+          kathiPerGuntheInput.value = "20";
+          rateGunthe.value = "300";
+          ratePreset.value = "300";
+          rateEkarInput.value = "12000";
+          kamimapDiv.style.display = "none";
+          doCalc();
+        });
+
+        /* ---------- Core calculation (preserved logic) ---------- */
+        function doCalc() {
+          const kathiPerGunthe = parseFloat(kathiPerGuntheInput.value) || 20;
+          const rate = parseFloat(rateGunthe.value) || 0;
+
+          let totalKathi = 0;
+          Array.from(entriesEl.children).forEach((ent) => {
+            const inputs = ent.querySelectorAll("input");
+            const u = parseFloat(inputs[0].value) || 0;
+            const v = parseFloat(inputs[1].value) || 0;
+            totalKathi += u * v;
+          });
+
+          let kamiTotal = 0;
+          Array.from(kamiList.children).forEach((k) => {
+            const i = k.querySelectorAll("input");
+            const ku = parseFloat(i[0].value) || 0;
+            const ka = parseFloat(i[1].value) || 0;
+            kamiTotal += ku * ka;
+          });
+
+          const netKathi = totalKathi - kamiTotal;
+          const totalGunthe = netKathi / kathiPerGunthe;
+          const intG = Math.floor(totalGunthe);
+          const decG = +(totalGunthe - intG).toFixed(4);
+          const decToKathi = +(decG * kathiPerGunthe).toFixed(4);
+          const pricePerKathi = rate / kathiPerGunthe;
+          const decRupees = +(decG * rate).toFixed(2);
+          const totalRupees = +(totalGunthe * rate).toFixed(2);
+          const official = netKathi / 22.24;
+
+          totalKathiEl.textContent = (
+            Math.round(netKathi * 100) / 100
+          ).toLocaleString();
+          totalGuntheEl.textContent = totalGunthe.toFixed(4);
+          intGuntheEl.textContent = intG;
+          decToKathiEl.textContent = decToKathi + " काठी (अंदाज)";
+          pricePerKathiEl.textContent =
+            "₹" + Math.round(pricePerKathi * 100) / 100;
+          kamiTotalEl.textContent =
+            (Math.round(kamiTotal * 100) / 100).toLocaleString() + " काठी";
+          decRupeesEl.textContent = "₹" + decRupees;
+          totalRupeesEl.textContent = "₹" + totalRupees;
+          officialCompareEl.textContent = official.toFixed(4) + " गुंठे";
+        }
+
+        /* realtime calc when inputs change */
+        document.body.addEventListener("input", (e) => {
+          if (
+            e.target &&
+            (e.target.tagName === "INPUT" || e.target.tagName === "SELECT")
+          )
+            doCalc();
+        });
+
+        /* ---------- Download CSV ---------- */
+        downloadBtn.addEventListener("click", () => {
+          let csv = "\uFEFF"; // UTF-8 BOM FIX
+          csv += "उभा (काठी),आडवा (काठी),क्षेत्र (काठी)\n";
+
+          Array.from(entriesEl.children).forEach((ent) => {
+            const inputs = ent.querySelectorAll("input");
+            const u = parseFloat(inputs[0].value) || 0;
+            const v = parseFloat(inputs[1].value) || 0;
+            csv += `${u},${v},${u * v}\n`;
+          });
+
+          const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "kathi_entries.csv";
+          a.click();
+          URL.revokeObjectURL(url);
+        });
+
+        /* ---------- Paise vatap logic (preserved) ---------- */
+        function resetPaiseTable() {
+          currentDivas = 1;
+          paiseTableBody.innerHTML = "";
+          updatePerDay();
+          addPaiseRow();
+        }
+
+        function updatePerDay() {
+          const totalLabour = parseInt(totalLabourInput.value) || 1;
+          const manualAmount = parseFloat(manualAmountInput.value);
+          let totalAmount;
+          if (!isNaN(manualAmount) && manualAmount > 0) {
+            totalAmount = manualAmount;
+          } else {
+            totalAmount =
+              parseFloat(
+                document
+                  .getElementById("totalRupees")
+                  .textContent.replace("₹", "")
+              ) || 0;
+          }
+          perPerson = Math.floor(totalAmount / totalLabour);
+          remainder = totalAmount - perPerson * totalLabour;
+          perDayHeading.textContent = `दर दिवसाचे पैसे: ₹${perPerson}`;
+        }
+
+        function addPaiseRow() {
+          const totalLabour = parseInt(totalLabourInput.value) || 1;
+          const row = document.createElement("tr");
+          const divasCell = document.createElement("td");
+          const paiseCell = document.createElement("td");
+          divasCell.textContent = currentDivas;
+          let amount = perPerson * currentDivas;
+          if (currentDivas === totalLabour) {
+            amount += remainder;
+          }
+          paiseCell.textContent = `₹${amount}`;
+          row.appendChild(divasCell);
+          row.appendChild(paiseCell);
+          paiseTableBody.appendChild(row);
+          currentDivas++;
+        }
+
+        paiseVatapBtn.addEventListener("click", () => {
+          paiseVatapDiv.style.display =
+            paiseVatapDiv.style.display === "none" ||
+            paiseVatapDiv.style.display === ""
+              ? "block"
+              : "none";
+          resetPaiseTable();
+        });
+
+        addPaiseRowBtn.addEventListener("click", () => {
+          updatePerDay();
+          addPaiseRow();
+        });
+
+        totalLabourInput.addEventListener("input", () => {
+          currentDivas = 1;
+          paiseTableBody.innerHTML = "";
+          updatePerDay();
+          addPaiseRow();
+        });
+
+        const observer = new MutationObserver(() => {
+          if (paiseVatapDiv.style.display !== "none") updatePerDay();
+        });
+        observer.observe(document.getElementById("totalRupees"), {
+          childList: true,
+        });
+
+        manualAmountInput.addEventListener("input", () => {
+          currentDivas = 1;
+          paiseTableBody.innerHTML = "";
+          updatePerDay();
+          addPaiseRow();
+        });
+
+        /* ---------- Mojne (preserved) ---------- */
+        resetBahya.addEventListener("click", () => {
+          bahyaList = [];
+          bahyaInput.value = "";
+          updateBahyaData();
+        });
+
+        mojneBtn.addEventListener("click", () => {
+          mojneDiv.style.display =
+            mojneDiv.style.display === "none" || mojneDiv.style.display === ""
+              ? "block"
+              : "none";
+        });
+
+        addBahya.addEventListener("click", () => {
+          const val = parseInt(bahyaInput.value);
+          if (!isNaN(val) && val > 0) {
+            bahyaList.push(val);
+            bahyaInput.value = "";
+            updateBahyaData();
+          }
+        });
+
+        function updateBahyaData() {
+          const total = bahyaList.reduce((a, b) => a + b, 0);
+          const count = bahyaList.length;
+          bahyaTotalHeading.textContent = `एकूण बेरीज: ${total}`;
+          bahyaCountHeading.textContent = `जोडलेली संख्या: ${count}`;
+          if (count > 0) {
+            bahyaBreakdown.textContent = bahyaList.join(" + ") + " = " + total;
+          } else {
+            bahyaBreakdown.textContent = "";
+          }
+        }
+
+        /* initial calc */
+        doCalc();
+      });
+    </script> 
+   
+  </body>
+</html>
